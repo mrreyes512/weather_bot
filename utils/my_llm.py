@@ -15,9 +15,9 @@ logging.basicConfig(
     level=logging.WARNING
 )
 
-class GNS_LLM(OpenAI):
+class MY_LLM(OpenAI):
     """
-    GNS_LLM is an extension of the OpenAI model, designed to interface with Cigna's AI COE LLM.
+    MY_LLM is an extension of the OpenAI model, designed to interface with Cigna's AI COE LLM.
     This class abstracts the underlying language model, and abstracts a few common functions.
     
     1. Set the system prompt, this allows you set the personality of the AI.
@@ -40,7 +40,7 @@ class GNS_LLM(OpenAI):
 
     def __init__(self, environment_url, projectname, api_key, api_version="2023-05-15"):
         """
-        Initializes the GNS_LLM class with the given parameters and sets up the environment variables.
+        Initializes the MY_LLM class with the given parameters and sets up the environment variables.
 
         Args:
             environment_url (str): The base URL of the environment.

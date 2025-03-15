@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from webexteamssdk import WebexTeamsAPI
 import pendulum
 
-from utils.my_llm import GNS_LLM
+from utils.my_llm import MY_LLM
 
 # Get current date
 now = pendulum.now().format('YYYY-MM-DD')

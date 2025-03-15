@@ -5,7 +5,7 @@ import os
 from dotenv import load_dotenv
 import pendulum
 
-from utils.my_llm import GNS_LLM
+from utils.my_llm import MY_LLM
 from utils.notify import GNS_CiscoWebex
 
 # Get current date

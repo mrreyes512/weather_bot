@@ -5,7 +5,7 @@ import pandas as pd
 import pendulum
 import urllib3
 from dotenv import load_dotenv
-from utils.my_llm import GNS_LLM
+from utils.my_llm import MY_LLM
 from utils.notify import GNS_CiscoWebex
 import random
 
@@ -39,7 +39,7 @@ token = os.getenv("AI_COE_TOKEN")
 engine = os.getenv("AI_COE_ENGINE")
 webex_token = os.getenv("WEBEX_TOKEN")
 
-llm = GNS_LLM(env_url, project_name, token)
+llm = MY_LLM(env_url, project_name, token)
 webex = GNS_CiscoWebex(access_token=webex_token)
 
 # Active while testing
