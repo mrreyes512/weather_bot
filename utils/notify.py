@@ -23,7 +23,7 @@ logging.basicConfig(
 webex_log = logging.getLogger('webexteamssdk')
 webex_log.setLevel(logging.ERROR)
 
-class GNS_CiscoWebex:
+class MY_CiscoWebex:
     def __init__(self, access_token):
         self.api = WebexTeamsAPI(access_token=access_token)
         self.log_bot_name()

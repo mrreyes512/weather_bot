@@ -12,6 +12,7 @@ urllib3 = "*"
 tabulate = "*"
 webexteamssdk = "*"
 python-weather = "*"
+async-timeout = "*"
 
 [dev-packages]
 

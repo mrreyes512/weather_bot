@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import pendulum
 
 from utils.my_llm import MY_LLM
-from utils.notify import GNS_CiscoWebex
+from utils.notify import MY_CiscoWebex
 
 # Get current date
 now = pendulum.now().format('YYYY-MM-DD')
@@ -26,7 +26,7 @@ webex_log.setLevel(logging.ERROR)
 # Load environment variables from .env file
 load_dotenv()
 webex_token = os.getenv("WEBEX_TOKEN")
-webex = GNS_CiscoWebex(access_token=webex_token)
+webex = MY_CiscoWebex(access_token=webex_token)
 
 def main(args):
     bot_description = f"prompts/description_goated_bot.md"

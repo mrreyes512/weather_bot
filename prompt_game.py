@@ -6,7 +6,7 @@ import pendulum
 import urllib3
 from dotenv import load_dotenv
 from utils.my_llm import MY_LLM
-from utils.notify import GNS_CiscoWebex
+from utils.notify import MY_CiscoWebex
 import random
 
 # Get current date
@@ -40,7 +40,7 @@ engine = os.getenv("AI_COE_ENGINE")
 webex_token = os.getenv("WEBEX_TOKEN")
 
 llm = MY_LLM(env_url, project_name, token)
-webex = GNS_CiscoWebex(access_token=webex_token)
+webex = MY_CiscoWebex(access_token=webex_token)
 
 # Active while testing
 logging.getLogger().setLevel(logging.INFO)
