@@ -97,17 +97,18 @@ def main(args):
     # md_msg += f"### {q_title}\n{answer}\n\n---\n\n"
 
     # Send the markdown content as a single message
-    room_name = "Webex space for Mark"
+    room_name = args.space
     webex.send_msg(md_msg, recipient=room_name)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '-p', '--prompt', type=str, default='gordon', help='Prompt to use'
-    )
-    parser.add_argument('-c', '--city', type=str, help='City to get weather data')
     parser.add_argument('-v', action='store_true')
+    parser.add_argument('-p', '--prompt', type=str, default='gordon', help='Prompt to use')
+    parser.add_argument('-c', '--city', type=str, help='City to get weather data')
+    parser.add_argument(
+        '-s', '--space', type=str, default='Webex space for Mark', help='Space or Email to send message'
+        )
     args = parser.parse_args()
 
     if args.v:
