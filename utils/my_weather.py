@@ -25,6 +25,7 @@ class MY_Weather:
         forecast_data = []
         for daily in self.weather_data.daily_forecasts:
             forecast_data.append({
+                "city": self.city,
                 "date": daily.date,
                 "high": daily.highest_temperature,
                 "low": daily.lowest_temperature,
@@ -48,6 +49,7 @@ class MY_Weather:
         for daily in self.weather_data.daily_forecasts:
             for hourly in daily:
                 hourly_data.append({
+                    "city": self.city,
                     "date": daily.date,
                     "time": hourly.time,
                     "description": hourly.kind,
