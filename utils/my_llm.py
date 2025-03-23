@@ -1,4 +1,4 @@
-import os
+import os, sys
 from openai import OpenAI
 import httpx
 import urllib3
@@ -7,14 +7,25 @@ import logging
 # Disable InsecureRequestWarning
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# Set up logging
-log = logging.getLogger(__name__)
-logging.basicConfig(
-    format='%(asctime)s | %(message)s', 
-    datefmt='%Y-%m-%d %H:%M:%S',
-    level=logging.WARNING
-)
 
+directory_name = os.path.basename(os.getcwd())
+log_file = os.path.join(os.getcwd(), f"{directory_name}.log")
+log = logging.getLogger(__name__)
+formatter = logging.Formatter(
+            '%(asctime)s | %(levelname).4s | %(message)s',
+            datefmt='%Y-%m-%d %H:%M:%S'
+        )
+
+stdout_handler = logging.StreamHandler(sys.stdout)
+stdout_handler.setLevel(logging.DEBUG)
+stdout_handler.setFormatter(formatter)
+
+file_handler = logging.FileHandler(log_file, mode='a')
+file_handler.setLevel(logging.INFO)
+file_handler.setFormatter(formatter)
+
+log.addHandler(file_handler)
+log.addHandler(stdout_handler)
 class MY_LLM(OpenAI):
     """
     MY_LLM is an extension of the OpenAI model, designed to interface with Cigna's AI COE LLM.
