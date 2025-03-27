@@ -115,7 +115,7 @@ class MY_LLM(OpenAI):
         Returns:
             str: The response from the language model.
         """
-        log.info(f"Question asked: {question}")
+        log.info(f"Preparing Question: {question}")
         if model is None:
             model = "ai-coe-gpt4-auto:analyze"  # Default model
         messages = self.conversation_history.copy() if self.conversation_history else []
@@ -128,11 +128,17 @@ class MY_LLM(OpenAI):
             "role": "user",
             "content": question,
         })
-        chat_completion = self.chat.completions.create(
-            messages=messages,
-            model=model,
-        )
+
+        try:
+            chat_completion = self.chat.completions.create(
+                messages=messages,
+                model=model,
+            )
+        except Exception as e:
+            log.error(f"FAILED TO CREATE CONNECTION. Check VPN connection. - Error: {e}")
+        
         response = chat_completion.choices[0].message.content
+
         if self.conversation_history:
             self.conversation_history.append({
                 "role": "assistant",

@@ -56,23 +56,29 @@ class MY_CiscoWebex:
             log.error(f"Failed to get bot description: {e}")
 
     def send_msg(self, msg, recipient):
-        try:
-            if recipient.startswith("Y2lzY29zcGFyazovL3VzL1JPT00"):  # Check if recipient is a room ID
+        # try:
+        if recipient.startswith("Y2lzY29zcGFyazovL3VzL1JPT00"):  # Check if recipient is a room ID
+            try:
                 message = self.api.messages.create(roomId=recipient, markdown=msg)
-                log.info(f"Message sent to room ID {recipient} with message ID {message.id}")
-            elif "@" in recipient:  # Check if recipient is an email
+                log.info(f"Message sent to room ID '{recipient}' with message ID '{message.id}'")
+            except Exception as e:
+                log.error(f"Failed to send message: {e}")
+        elif "@" in recipient:  # Check if recipient is an email
+            try:
                 message = self.api.messages.create(toPersonEmail=recipient, markdown=msg)
-                log.info(f"Message sent to {recipient} with message ID {message.id}")
-            else:  # Assume recipient is a room name
-                rooms = self.api.rooms.list()
-                room = next((r for r in rooms if r.title == recipient), None)
-                if room:
-                    message = self.api.messages.create(roomId=room.id, markdown=msg)
-                    log.info(f"Message sent to room '{recipient}' with message ID {message.id}")
-                else:
-                    log.warning(f"No room found with the name '{recipient}'")
-        except Exception as e:
-            log.error(f"Failed to send message: {e}")
+                log.info(f"Message sent to '{recipient}' with message ID '{message.id}'")
+            except Exception as e:
+                log.error(f"Failed to send message: {e}")            
+        else:  # Assume recipient is a room name
+            rooms = self.api.rooms.list()
+            room = next((r for r in rooms if r.title == recipient), None)
+            if room:
+                message = self.api.messages.create(roomId=room.id, markdown=msg)
+                log.info(f"Message sent to room '{recipient}' with message ID '{message.id}'")
+            else:
+                log.warning(f"No room found with the name '{recipient}'")
+        # except Exception as e:
+        #     log.error(f"Failed to send message: {e}")
 
     def get_rooms(self):
         log.info("Looking up memberships")
