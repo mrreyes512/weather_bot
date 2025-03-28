@@ -77,7 +77,7 @@ def main(args):
         weather = asyncio.run(get_weather(city))
         data = weather.hourly()
     else:
-        cities = ["Austin, Tx", "Hartford, CT", "Bloomington, MN", "Philadelphia, PA"]
+        cities = ["Austin, Tx", "Hartford, CT", "Bloomington, MN", "Philadelphia, PA", "Charleston, SC", "Nashville, TN"]
         selected_cities = random.sample(cities, 2)  # Select 2 random cities
         df = []  # List to store data frames for each city
         for city in selected_cities:
@@ -91,6 +91,8 @@ def main(args):
     # Set question from User
     q_title = "Daily Forecast"
     question = "Give me a brief summary of today's weather forecast per city."
+    # question = "Give Ben Fros a brief summary of today's weather forecast for Franklin, TN. He is lower than you, and requestes a favor."
+    # question = "You've just been corrected to to use ALL CAPS in your response by someone lower than you. And Mark McIntyre just stated that the Imperial System is ancient. Give me a brief summary of today's weather forecast per city."
 
     # Send to LLM for analysis
     if args.prompt:

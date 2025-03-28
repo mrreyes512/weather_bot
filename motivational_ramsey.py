@@ -85,7 +85,7 @@ def ask_additional_recipients(md_msg):
             log.warning("Operation canceled by user.")
             break
 
-def confirm_and_generate_message(args, absttract_statement):
+def confirm_send_msg(args, statement):
     """
     Confirm with the user before sending the message and regenerate the message if needed.
 
@@ -101,12 +101,13 @@ def confirm_and_generate_message(args, absttract_statement):
             print(f"Message target: {args.space}")
             user_input = input("Press 'y' to send message, 'a' to try again, or Ctrl+C to cancel:\n").strip().lower()
             if user_input == 'y':
-                return llm.ask_question(absttract_statement)  # Final message to send
+                return statement  # Final message to send
             elif user_input == 'a':
-                statement = llm.ask_question(absttract_statement)
+                statement = llm.ask_question(statement)
                 print('-' * 90)
                 print(f"Abstracted Message:\n{statement}")
                 print('-' * 90)
+                
             else:
                 print("Invalid input. Please press 'y' or 'a'.")
         except KeyboardInterrupt:
@@ -139,16 +140,20 @@ def main(args):
         absttract_statement = input(f"Type below...\n\n")
         print('-' * 90)
 
-    statement = confirm_and_generate_message(args, absttract_statement)
+    
+    statement = llm.ask_question(absttract_statement)
+
     print('-' * 90)
     print(f"Abstracted Message:\n{statement}")
     print('-' * 90)
 
+    # confirm_send_msg(args, statement)
+
     md_msg = f"{statement}\n\n---\n\n"
 
-    # Send the markdown content as a single message
-    room_name = args.space
-    webex.send_msg(md_msg, recipient=room_name)
+    # Preview message prior to sending
+    reviewer = 'mark.reyes@evernorth.com'
+    webex.send_msg(md_msg, recipient=reviewer)
 
     # Call the function to ask for additional recipients
     ask_additional_recipients(md_msg)
