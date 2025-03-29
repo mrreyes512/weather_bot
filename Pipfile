@@ -13,6 +13,8 @@ tabulate = "*"
 webexteamssdk = "*"
 python-weather = "*"
 async-timeout = "*"
+webex-bot = "*"
+coloredlogs = "*"
 
 [dev-packages]
 

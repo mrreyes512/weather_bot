@@ -7,28 +7,15 @@ from webexteamssdk import WebexTeamsAPI
 import pendulum
 
 from utils.my_llm import MY_LLM
+from utils.my_logging import MY_Logger
 
 # Get current date
 now = pendulum.now().format('YYYY-MM-DD')
 
 directory_name = os.path.basename(os.getcwd())
 log_file = os.path.join(os.getcwd(), f"{directory_name}.log")
-log = logging.getLogger(__name__)
-formatter = logging.Formatter(
-            '%(asctime)s | %(levelname).4s | %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S'
-        )
+log = MY_Logger(log_file=log_file, detailed_logs=False).get_logger()
 
-stdout_handler = logging.StreamHandler(sys.stdout)
-stdout_handler.setLevel(logging.DEBUG)
-stdout_handler.setFormatter(formatter)
-
-file_handler = logging.FileHandler(log_file, mode='a')
-file_handler.setLevel(logging.INFO)
-file_handler.setFormatter(formatter)
-
-log.addHandler(file_handler)
-log.addHandler(stdout_handler)
 
 # Set webexteamssdk logger to ERROR level
 webex_log = logging.getLogger('webexteamssdk')
@@ -38,7 +25,6 @@ class MY_CiscoWebex:
     def __init__(self, access_token):
         self.api = WebexTeamsAPI(access_token=access_token)
         self.log_bot_name()
-        self.log_bot_description()  # Add this line to call the new method
 
     def log_bot_name(self):
         try:
@@ -47,13 +33,6 @@ class MY_CiscoWebex:
             log.info(f"++ Bot Email: {me.emails[0]}")
         except Exception as e:
             log.error(f"Failed to get bot name: {e}")
-
-    def log_bot_description(self):
-        try:
-            me = self.api.people.me()
-            log.info(f"++ Bot Description: {me.nickName}")
-        except Exception as e:
-            log.error(f"Failed to get bot description: {e}")
 
     def send_msg(self, msg, recipient):
         # try:

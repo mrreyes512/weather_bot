@@ -1,52 +1,51 @@
-import argparse
-import asyncio
 import logging
 import os
-import random
 import sys
 
-import pandas as pd
 import pendulum
-import urllib3
-from dotenv import load_dotenv
-
-# from utils.my_llm import MY_LLM
-# from utils.my_weather import MY_Weather
-# from utils.notify import MY_CiscoWebex
+import coloredlogs
 
 class MY_Logger:
-    def __init__(self, log_file: str, log_level=logging.INFO):
+    def __init__(self, log_file: str, log_level=logging.INFO, detailed_logs=False):
         self.log_file = log_file
         self.log_level = log_level
+        self.detailed_logs = detailed_logs
         self.log = logging.getLogger()
         self._configure_logger()
 
     def _configure_logger(self):
+        # Clear existing handlers to avoid duplicate logs
+        if self.log.hasHandlers():
+            self.log.handlers.clear()
+
         self.log.setLevel(self.log_level)
 
-        # Add handlers to the logger
-        self.log.addHandler(self._get_stdout_handler())
-        self.log.addHandler(self._get_file_handler())
+        # Choose the logging format based on the detailed_logs flag
+        log_format = (
+            '%(asctime)s  [%(levelname)s]  [%(module)s.%(name)s.%(funcName)s]:%(lineno)s %(message)s'
+            if self.detailed_logs
+            else '%(asctime)s  [%(levelname).4s]  %(message)s'
+        )
 
-    def _get_formatter(self):
-        """Create and return a logging formatter."""
-        return logging.Formatter(
-            '%(asctime)s | %(levelname).4s | %(message)s',
+        # Configure coloredlogs
+        coloredlogs.install(
+            level=self.log_level,
+            logger=self.log,
+            fmt=log_format,
             datefmt='%Y-%m-%d %H:%M:%S'
         )
 
-    def _get_stdout_handler(self):
-        """Create and return a stream handler for console output."""
-        stdout_handler = logging.StreamHandler(sys.stdout)
-        stdout_handler.setLevel(logging.DEBUG)
-        stdout_handler.setFormatter(self._get_formatter())
-        return stdout_handler
+        # Add only the file handler to the logger
+        self.log.addHandler(self._get_file_handler())
 
     def _get_file_handler(self):
         """Create and return a file handler for logging to a file."""
         file_handler = logging.FileHandler(self.log_file)
-        file_handler.setLevel(logging.DEBUG)
-        file_handler.setFormatter(self._get_formatter())
+        file_handler.setLevel(logging.INFO)
+        file_handler.setFormatter(logging.Formatter(
+            '%(asctime)s | %(levelname).4s | %(message)s',
+            datefmt='%Y-%m-%d %H:%M:%S'
+        ))
         return file_handler
 
     def get_logger(self):
@@ -61,9 +60,10 @@ if __name__ == "__main__":
     # Set up logging
     directory_name = os.path.basename(os.getcwd())
     log_file = os.path.join(os.getcwd(), f"{directory_name}.log")
-    log = Logger(log_file=log_file, log_level=logging.DEBUG).get_logger()
+    log = MY_Logger(log_file=log_file, log_level=logging.DEBUG, detailed_logs=False).get_logger()
 
+    log.debug('Testing debug logging')
     log.info(f"Test info: {now}")
     log.warning('Testing logging to file')
     log.error('Testing error logging')
-    log.debug('Testing debug logging')
+    log.critical('Testing critical logging')
